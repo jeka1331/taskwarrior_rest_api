@@ -1,0 +1,26 @@
+services:
+  taskd:
+    container_name: taskd
+    image: x4121/taskd:latest
+    restart: always 
+    ports:
+      - "53589:53589"
+    volumes:
+      - taskdata:/var/taskd
+    environment:
+      - CERT_CN="taskd"
+      - CERT_ORGANIZATION="Turan"
+      - CERT_COUNTRY="KZ"
+      - CERT_STATE="Almaty"
+      - CERT_LOCALITY="Almaty"
+  tw_rest_api:
+    volumes:
+      - taskdata:/var/taskd
+    container_name: tw_rest_api
+    build: ./build_files/tw_rest_api/
+    depends_on: 
+      - taskd
+    restart: always 
+    tty: true
+volumes:
+  taskdata:
